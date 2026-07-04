@@ -6,16 +6,18 @@
 /* CSS Variables - Design Tokens */
 :root {
     /* Colors */
-    --color-bg-primary: #0a0b0d;
-    --color-bg-secondary: #12141c;
-    --color-bg-card: #12141c;
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8f9fa;
+    --color-bg-card: #ffffff;
     --color-accent-primary: #0052ff;
     --color-accent-cyan: #00d2ff;
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #b0b3b8;
+    --color-moonlight: #a8c5e8;
+    --color-silver: #c0c0c0;
+    --color-text-primary: #0a0b0d;
+    --color-text-secondary: #4a4d52;
     --color-text-muted: #6e7278;
-    --color-border: rgba(255, 255, 255, 0.08);
-    --color-border-hover: rgba(0, 210, 255, 0.3);
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-border-hover: rgba(168, 197, 232, 0.5);
     
     /* Typography */
     --font-family: 'Montserrat', sans-serif;
@@ -82,7 +84,7 @@ body {
     left: 0;
     right: 0;
     height: var(--navbar-height);
-    background: rgba(10, 11, 13, 0.7);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--color-border);
@@ -92,8 +94,8 @@ body {
 
 .navbar.scrolled {
     height: var(--navbar-height-scrolled);
-    background: rgba(10, 11, 13, 0.95);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
@@ -224,9 +226,9 @@ body {
     bottom: 0;
     background: linear-gradient(
         135deg,
-        rgba(10, 11, 13, 0.85) 0%,
-        rgba(10, 11, 13, 0.7) 50%,
-        rgba(0, 82, 255, 0.2) 100%
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
+        rgba(0, 82, 255, 0.15) 100%
     );
     z-index: 1;
 }
@@ -248,9 +250,12 @@ body {
     font-size: clamp(1rem, 2vw, 1.25rem);
     font-weight: var(--font-weight-light);
     letter-spacing: 8px;
-    color: var(--color-accent-cyan);
+    background: linear-gradient(135deg, var(--color-moonlight) 0%, #0a0b0d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     margin-bottom: var(--spacing-sm);
-    text-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+    text-shadow: 0 0 20px rgba(168, 197, 232, 0.3);
 }
 
 .hero-main {
@@ -259,17 +264,20 @@ body {
     font-weight: var(--font-weight-bold);
     letter-spacing: 4px;
     line-height: 1.1;
-    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-accent-cyan) 100%);
+    background: linear-gradient(135deg, var(--color-moonlight) 0%, #0a0b0d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 40px rgba(0, 210, 255, 0.3);
+    text-shadow: 0 0 40px rgba(168, 197, 232, 0.3);
 }
 
 .hero-description {
     font-size: clamp(1rem, 2vw, 1.15rem);
     font-weight: var(--font-weight-light);
-    color: var(--color-text-secondary);
+    background: linear-gradient(135deg, var(--color-moonlight) 0%, #0a0b0d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     max-width: 600px;
     margin: 0 auto var(--spacing-lg);
     line-height: 1.8;
@@ -367,7 +375,7 @@ section {
     font-weight: var(--font-weight-bold);
     letter-spacing: 3px;
     margin-bottom: var(--spacing-sm);
-    background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-accent-cyan) 100%);
+    background: linear-gradient(135deg, var(--color-moonlight) 0%, #0a0b0d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -451,8 +459,8 @@ section {
     bottom: 0;
     background: linear-gradient(
         to top,
-        rgba(10, 11, 13, 0.95) 0%,
-        rgba(10, 11, 13, 0.5) 50%,
+        rgba(0, 0, 0, 0.85) 0%,
+        rgba(0, 0, 0, 0.4) 50%,
         transparent 100%
     );
     display: flex;
@@ -826,6 +834,118 @@ section {
 ::-moz-selection {
     background: var(--color-accent-primary);
     color: var(--color-text-primary);
+}
+
+/* Silver Shimmer Effect */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.product-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid transparent;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(192, 192, 192, 0.1) 50%,
+        transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 3s infinite linear;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.product-card:hover::after {
+    opacity: 1;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid transparent;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(192, 192, 192, 0.15) 50%,
+        transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 4s infinite linear;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.feature-card:hover::after {
+    opacity: 1;
+}
+
+.cta-button::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(192, 192, 192, 0.3) 50%,
+        transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.cta-button:hover::after {
+    opacity: 1;
+}
+
+.checkout-btn::after,
+.purchase-btn::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(192, 192, 192, 0.3) 50%,
+        transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+
+.checkout-btn:hover::after,
+.purchase-btn:hover::after {
+    opacity: 1;
 }
 
 /* Scrollbar Styling */

@@ -719,7 +719,7 @@ cursorGlow.style.cssText = `
     position: fixed;
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 82, 255, 0.06) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
