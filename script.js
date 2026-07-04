@@ -239,14 +239,16 @@ function updateQuantity(productName, change) {
     const item = cart.find(item => item.name === productName);
     if (!item) return;
     
-    item.quantity += change;
+    const newQuantity = item.quantity + change;
     
-    if (item.quantity <= 0) {
+    if (newQuantity <= 0) {
         removeFromCart(productName);
     } else {
+        item.quantity = newQuantity;
         cartCount += change;
         saveCart();
         updateCartBadge();
+        renderCart(); // Re-render cart to show updated quantities
     }
 }
 
@@ -335,13 +337,13 @@ function renderCart() {
                 <span class="summary-total-label">TOTAL</span>
                 <span class="summary-total-value">$${total.toFixed(2)}</span>
             </div>
-            <button class="checkout-btn" onclick="handleCheckout()">
+            <a href="checkout.html" class="checkout-btn">
                 PROCEED TO CHECKOUT
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
-            </button>
+            </a>
             <a href="index.html#shop" class="continue-shopping">← Continue Shopping</a>
         </div>
     `;
@@ -359,10 +361,221 @@ function renderCart() {
 function handleCheckout() {
     if (cart.length === 0) return;
     
-    const { total } = calculateTotals();
+    // Redirect to checkout page
+    window.location.href = 'checkout.html';
+}
+
+// Render checkout page
+function renderCheckout() {
+    const checkoutContent = document.getElementById('checkoutContent');
+    if (!checkoutContent) return;
     
-    // In a real application, this would redirect to a checkout page
-    alert(`Thank you for your order!\n\nTotal: $${total.toFixed(2)}\n\nThis is a demo. In a real application, you would be redirected to a secure checkout page.`);
+    if (cart.length === 0) {
+        checkoutContent.innerHTML = `
+            <div class="empty-checkout">
+                <div class="empty-checkout-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="16" y1="10" x2="16" y2="14"></line>
+                        <line x1="12" y1="10" x2="12" y2="14"></line>
+                        <line x1="8" y1="10" x2="8" y2="14"></line>
+                    </svg>
+                </div>
+                <h2 class="empty-checkout-title">YOUR CART IS EMPTY</h2>
+                <p class="empty-checkout-text">Add some items to your cart before checking out.</p>
+                <a href="index.html#shop" class="back-to-shop">
+                    CONTINUE SHOPPING
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        `;
+        return;
+    }
+    
+    const { subtotal, shipping, tax, total } = calculateTotals();
+    
+    const formSectionHTML = `
+        <div class="checkout-form-section">
+            <h2 class="form-section-title">SHIPPING INFORMATION</h2>
+            <form id="checkoutForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="John" required>
+                        <span class="error-message">Please enter your first name</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Doe" required>
+                        <span class="error-message">Please enter your last name</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" required>
+                    <span class="error-message">Please enter a valid email</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" placeholder="123 Luxury Street" required>
+                    <span class="error-message">Please enter your address</span>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" placeholder="New York" required>
+                        <span class="error-message">Please enter your city</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="zip">ZIP Code</label>
+                        <input type="text" id="zip" placeholder="10001" required>
+                        <span class="error-message">Please enter your ZIP code</span>
+                    </div>
+                </div>
+                
+                <h2 class="form-section-title" style="margin-top: var(--spacing-lg);">PAYMENT INFORMATION</h2>
+                
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <span class="error-message">Please enter a valid card number</span>
+                    <div class="card-icons">
+                        <div class="card-icon">VISA</div>
+                        <div class="card-icon">MC</div>
+                        <div class="card-icon">AMEX</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expiry">Expiry Date</label>
+                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
+                        <span class="error-message">Please enter expiry date</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+                        <span class="error-message">Please enter CVV</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="purchase-btn">
+                    COMPLETE PURCHASE
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    `;
+    
+    const summaryHTML = `
+        <div class="order-summary">
+            <h2 class="summary-title">ORDER SUMMARY</h2>
+            <div class="summary-items">
+                ${cart.map(item => `
+                    <div class="summary-item">
+                        <span class="summary-item-name">${item.name}</span>
+                        <span class="summary-item-quantity">x${item.quantity}</span>
+                        <span class="summary-item-price">$${(item.price * item.quantity).toLocaleString()}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value">$${subtotal.toLocaleString()}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Shipping</span>
+                <span class="summary-value">${shipping === 0 ? 'FREE' : '$' + shipping}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Tax (8%)</span>
+                <span class="summary-value">$${tax.toFixed(2)}</span>
+            </div>
+            <div class="summary-total">
+                <span class="summary-total-label">TOTAL</span>
+                <span class="summary-total-value">$${total.toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+    
+    checkoutContent.innerHTML = formSectionHTML + summaryHTML;
+    
+    // Add form validation and submission
+    const checkoutForm = document.getElementById('checkoutForm');
+    if (checkoutForm) {
+        checkoutForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simple validation
+            if (validateForm()) {
+                completePurchase();
+            }
+        });
+    }
+}
+
+// Form validation
+function validateForm() {
+    let isValid = true;
+    const requiredFields = document.querySelectorAll('#checkoutForm input[required]');
+    
+    requiredFields.forEach(field => {
+        const errorMessage = field.nextElementSibling;
+        
+        if (!field.value.trim()) {
+            field.classList.add('error');
+            if (errorMessage && errorMessage.classList.contains('error-message')) {
+                errorMessage.classList.add('show');
+            }
+            isValid = false;
+        } else {
+            field.classList.remove('error');
+            if (errorMessage && errorMessage.classList.contains('error-message')) {
+                errorMessage.classList.remove('show');
+            }
+        }
+    });
+    
+    return isValid;
+}
+
+// Complete purchase
+function completePurchase() {
+    // Clear cart
+    cart = [];
+    cartCount = 0;
+    saveCart();
+    updateCartBadge();
+    
+    // Show success message
+    showSuccessMessage();
+    
+    // Redirect to home page after 2 seconds
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
+}
+
+// Show success message
+function showSuccessMessage() {
+    const successMessage = document.getElementById('successMessage');
+    if (!successMessage) return;
+    
+    successMessage.classList.add('show');
+    
+    // Hide after 5 seconds
+    setTimeout(() => {
+        successMessage.classList.remove('show');
+    }, 5000);
 }
 
 // Quick add button handlers

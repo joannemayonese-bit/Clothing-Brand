@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | NOIR ÉLITE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Checkout-specific styles */
+        .checkout-page {
+            padding-top: calc(var(--navbar-height) + var(--spacing-xl));
+            min-height: 100vh;
+        }
+
+        .checkout-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        .checkout-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .checkout-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 3px;
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-accent-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .checkout-subtitle {
+            font-size: 1rem;
+            font-weight: var(--font-weight-light);
+            color: var(--color-text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .checkout-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--spacing-lg);
+            align-items: start;
+        }
+
+        .checkout-form-section {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-lg);
+        }
+
+        .form-section-title {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: var(--font-weight-regular);
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-primary);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.1);
+        }
+
+        .form-group input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .form-group input.error {
+            border-color: #ff6464;
+            box-shadow: 0 0 0 3px rgba(255, 100, 100, 0.1);
+        }
+
+        .error-message {
+            color: #ff6464;
+            font-size: 0.85rem;
+            margin-top: var(--spacing-xs);
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .card-icons {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 30px;
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            letter-spacing: 1px;
+        }
+
+        .order-summary {
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-border);
+            padding: var(--spacing-lg);
+            position: sticky;
+            top: calc(var(--navbar-height) + var(--spacing-md));
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .summary-items {
+            margin-bottom: var(--spacing-lg);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.9rem;
+            padding-bottom: var(--spacing-sm);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .summary-item-name {
+            color: var(--color-text-secondary);
+            flex: 1;
+        }
+
+        .summary-item-quantity {
+            color: var(--color-text-muted);
+            margin: 0 var(--spacing-sm);
+        }
+
+        .summary-item-price {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-sm);
+            font-size: 0.95rem;
+        }
+
+        .summary-label {
+            color: var(--color-text-secondary);
+            font-weight: var(--font-weight-light);
+        }
+
+        .summary-value {
+            font-weight: var(--font-weight-bold);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--color-border);
+            font-size: 1.25rem;
+        }
+
+        .summary-total-label {
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 1px;
+        }
+
+        .summary-total-value {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+        }
+
+        .purchase-btn {
+            width: 100%;
+            margin-top: var(--spacing-lg);
+            padding: 1.2rem;
+            background: var(--color-accent-primary);
+            color: var(--color-text-primary);
+            border: none;
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all var(--transition-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .purchase-btn:hover {
+            background: var(--color-accent-cyan);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        .purchase-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .back-to-cart {
+            display: block;
+            text-align: center;
+            margin-top: var(--spacing-md);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color var(--transition-fast);
+        }
+
+        .back-to-cart:hover {
+            color: var(--color-accent-cyan);
+        }
+
+        .empty-checkout {
+            text-align: center;
+            padding: var(--spacing-xl) 0;
+        }
+
+        .empty-checkout-icon {
+            color: var(--color-text-muted);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .empty-checkout-title {
+            font-size: 1.75rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .empty-checkout-text {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            font-weight: var(--font-weight-light);
+        }
+
+        .back-to-shop {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: 1rem 2rem;
+            background: var(--color-accent-primary);
+            color: var(--color-text-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            transition: all var(--transition-medium);
+            text-transform: uppercase;
+        }
+
+        .back-to-shop:hover {
+            background: var(--color-accent-cyan);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Success Message */
+        .success-message {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-cyan) 100%);
+            color: var(--color-text-primary);
+            padding: 1.5rem 3rem;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-bold);
+            letter-spacing: 2px;
+            box-shadow: 0 4px 20px rgba(0, 210, 255, 0.4);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .success-message.show {
+            opacity: 1;
+            visibility: visible;
+            animation: slideDown 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .checkout-content {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-form-section {
+                padding: var(--spacing-md);
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">NOIR ÉLITE</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html#shop" class="nav-link">Shop</a></li>
+                <li><a href="index.html#features" class="nav-link">Features</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <a href="cart.html" class="cart-icon" id="cartIcon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+        ✓ THANK YOU FOR YOUR PURCHASE!
+    </div>
+
+    <!-- Checkout Page Content -->
+    <div class="checkout-page">
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h1 class="checkout-title">CHECKOUT</h1>
+                <p class="checkout-subtitle">Complete your purchase</p>
+            </div>
+
+            <div class="checkout-content" id="checkoutContent">
+                <!-- Checkout content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2024 NOIR ÉLITE. All rights reserved. Crafted with precision.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Checkout page specific initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            // Ensure cart is loaded before rendering
+            if (typeof loadCart === 'function') {
+                loadCart();
+            }
+            renderCheckout();
+        });
+    </script>
+</body>
+</html>
