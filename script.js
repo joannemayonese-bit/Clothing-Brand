@@ -38,19 +38,24 @@ const navLinks = document.querySelectorAll('.nav-link');
 
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-        e.preventDefault();
         const targetId = link.getAttribute('href');
-        const targetSection = document.querySelector(targetId);
         
-        if (targetSection) {
-            const navbarHeight = navbar.offsetHeight;
-            const targetPosition = targetSection.offsetTop - navbarHeight;
+        // Check if it's an anchor link (starts with #)
+        if (targetId.startsWith('#')) {
+            e.preventDefault();
+            const targetSection = document.querySelector(targetId);
             
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
+            if (targetSection) {
+                const navbarHeight = navbar.offsetHeight;
+                const targetPosition = targetSection.offsetTop - navbarHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
         }
+        // If it's a regular link (like index.html), let it navigate normally
     });
 });
 
@@ -135,10 +140,55 @@ productImages.forEach(img => {
 // ============================================
 // Shopping Cart Functionality
 // ============================================
+let cart = [];
 let cartCount = 0;
 const cartBadge = document.getElementById('cartBadge');
 const quickAddButtons = document.querySelectorAll('.quick-add-btn');
 
+// Product data for cart
+const products = {
+    'Premium Wool Suit': {
+        name: 'Premium Wool Suit',
+        category: 'Formal Collection',
+        price: 2499,
+        image: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&q=80&w=600'
+    },
+    'Italian Linen Blazer': {
+        name: 'Italian Linen Blazer',
+        category: 'Smart Casual',
+        price: 1899,
+        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=600'
+    },
+    'Leather Bomber Jacket': {
+        name: 'Leather Bomber Jacket',
+        category: 'Outerwear',
+        price: 3299,
+        image: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=600'
+    },
+    'Cashmere Overcoat': {
+        name: 'Cashmere Overcoat',
+        category: 'Winter Collection',
+        price: 4199,
+        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600'
+    }
+};
+
+// Load cart from localStorage
+function loadCart() {
+    const savedCart = localStorage.getItem('noirEliteCart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        updateCartBadge();
+    }
+}
+
+// Save cart to localStorage
+function saveCart() {
+    localStorage.setItem('noirEliteCart', JSON.stringify(cart));
+}
+
+// Update cart badge
 function updateCartBadge() {
     cartBadge.textContent = cartCount;
     
@@ -149,6 +199,173 @@ function updateCartBadge() {
     }, 400);
 }
 
+// Add item to cart
+function addToCart(productName) {
+    const product = products[productName];
+    if (!product) return;
+    
+    const existingItem = cart.find(item => item.name === productName);
+    
+    if (existingItem) {
+        existingItem.quantity++;
+    } else {
+        cart.push({
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
+    
+    cartCount++;
+    saveCart();
+    updateCartBadge();
+}
+
+// Remove item from cart
+function removeFromCart(productName) {
+    const index = cart.findIndex(item => item.name === productName);
+    if (index > -1) {
+        cartCount -= cart[index].quantity;
+        cart.splice(index, 1);
+        saveCart();
+        updateCartBadge();
+    }
+}
+
+// Update item quantity
+function updateQuantity(productName, change) {
+    const item = cart.find(item => item.name === productName);
+    if (!item) return;
+    
+    item.quantity += change;
+    
+    if (item.quantity <= 0) {
+        removeFromCart(productName);
+    } else {
+        cartCount += change;
+        saveCart();
+        updateCartBadge();
+    }
+}
+
+// Calculate cart totals
+function calculateTotals() {
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const shipping = subtotal > 1000 ? 0 : 50; // Free shipping over $1000
+    const tax = subtotal * 0.08; // 8% tax
+    const total = subtotal + shipping + tax;
+    
+    return { subtotal, shipping, tax, total };
+}
+
+// Render cart page
+function renderCart() {
+    const cartContent = document.getElementById('cartContent');
+    if (!cartContent) return;
+    
+    if (cart.length === 0) {
+        cartContent.innerHTML = `
+            <div class="empty-cart">
+                <div class="empty-cart-icon">
+                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                </div>
+                <h2 class="empty-cart-title">YOUR CART IS EMPTY</h2>
+                <p class="empty-cart-text">Looks like you haven't added any items to your cart yet.</p>
+                <a href="index.html#shop" class="back-to-shop">
+                    CONTINUE SHOPPING
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+            </div>
+        `;
+        return;
+    }
+    
+    const { subtotal, shipping, tax, total } = calculateTotals();
+    
+    let cartItemsHTML = '<div class="cart-items">';
+    
+    cart.forEach((item, index) => {
+        cartItemsHTML += `
+            <div class="cart-item reveal-element" data-index="${index}">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                <div class="cart-item-details">
+                    <h3 class="cart-item-name">${item.name}</h3>
+                    <p class="cart-item-category">${item.category}</p>
+                    <p class="cart-item-price">$${item.price.toLocaleString()}</p>
+                </div>
+                <div class="cart-item-actions">
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateQuantity('${item.name}', -1)">−</button>
+                        <span class="quantity-value">${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity('${item.name}', 1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart('${item.name}')">Remove</button>
+                </div>
+            </div>
+        `;
+    });
+    
+    cartItemsHTML += '</div>';
+    
+    const summaryHTML = `
+        <div class="cart-summary">
+            <h2 class="summary-title">ORDER SUMMARY</h2>
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value">$${subtotal.toLocaleString()}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Shipping</span>
+                <span class="summary-value">${shipping === 0 ? 'FREE' : '$' + shipping}</span>
+            </div>
+            <div class="summary-row">
+                <span class="summary-label">Tax (8%)</span>
+                <span class="summary-value">$${tax.toFixed(2)}</span>
+            </div>
+            <div class="summary-total">
+                <span class="summary-total-label">TOTAL</span>
+                <span class="summary-total-value">$${total.toFixed(2)}</span>
+            </div>
+            <button class="checkout-btn" onclick="handleCheckout()">
+                PROCEED TO CHECKOUT
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </button>
+            <a href="index.html#shop" class="continue-shopping">← Continue Shopping</a>
+        </div>
+    `;
+    
+    cartContent.innerHTML = cartItemsHTML + summaryHTML;
+    
+    // Re-observe new reveal elements
+    const newRevealElements = cartContent.querySelectorAll('.reveal-element');
+    newRevealElements.forEach(element => {
+        revealObserver.observe(element);
+    });
+}
+
+// Handle checkout
+function handleCheckout() {
+    if (cart.length === 0) return;
+    
+    const { total } = calculateTotals();
+    
+    // In a real application, this would redirect to a checkout page
+    alert(`Thank you for your order!\n\nTotal: $${total.toFixed(2)}\n\nThis is a demo. In a real application, you would be redirected to a secure checkout page.`);
+}
+
+// Quick add button handlers
 quickAddButtons.forEach(button => {
     button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -161,13 +378,12 @@ quickAddButtons.forEach(button => {
             return;
         }
         
+        // Add to cart
+        addToCart(productName);
+        
         // Change button state
         button.classList.add('added');
         btnText.textContent = 'ADDED TO CART ✓';
-        
-        // Increment cart count
-        cartCount++;
-        updateCartBadge();
         
         // Reset button after 2 seconds
         setTimeout(() => {
@@ -305,6 +521,9 @@ window.addEventListener('resize', () => {
 // Initialize on Page Load
 // ============================================
 window.addEventListener('DOMContentLoaded', () => {
+    // Load cart from localStorage
+    loadCart();
+    
     // Initial navbar state check
     handleNavbarScroll();
     
