@@ -440,29 +440,55 @@ function renderCheckout() {
                     </div>
                 </div>
                 
-                <h2 class="form-section-title" style="margin-top: var(--spacing-lg);">PAYMENT INFORMATION</h2>
+                <h2 class="form-section-title" style="margin-top: var(--spacing-lg);">PAYMENT METHOD</h2>
                 
-                <div class="form-group">
-                    <label for="cardNumber">Card Number</label>
-                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                    <span class="error-message">Please enter a valid card number</span>
-                    <div class="card-icons">
-                        <div class="card-icon">VISA</div>
-                        <div class="card-icon">MC</div>
-                        <div class="card-icon">AMEX</div>
+                <div class="payment-methods">
+                    <div class="payment-option">
+                        <input type="radio" id="creditCard" name="paymentMethod" value="creditCard" checked>
+                        <label for="creditCard" class="payment-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                                <line x1="1" y1="10" x2="23" y2="10"></line>
+                            </svg>
+                            <span>Credit Card</span>
+                        </label>
+                    </div>
+                    
+                    <div class="payment-option">
+                        <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cashOnDelivery">
+                        <label for="cashOnDelivery" class="payment-label">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <span>Cash on Delivery</span>
+                        </label>
                     </div>
                 </div>
                 
-                <div class="form-row">
+                <div id="creditCardFields">
                     <div class="form-group">
-                        <label for="expiry">Expiry Date</label>
-                        <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" required>
-                        <span class="error-message">Please enter expiry date</span>
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <span class="error-message">Please enter a valid card number</span>
+                        <div class="card-icons">
+                            <div class="card-icon">VISA</div>
+                            <div class="card-icon">MC</div>
+                            <div class="card-icon">AMEX</div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="cvv">CVV</label>
-                        <input type="text" id="cvv" placeholder="123" maxlength="3" required>
-                        <span class="error-message">Please enter CVV</span>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" placeholder="MM/YY" maxlength="5">
+                            <span class="error-message">Please enter expiry date</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="3">
+                            <span class="error-message">Please enter CVV</span>
+                        </div>
                     </div>
                 </div>
                 
@@ -521,6 +547,26 @@ function renderCheckout() {
             }
         });
     }
+    
+    // Payment method switching
+    const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+    const creditCardFields = document.getElementById('creditCardFields');
+    
+    paymentMethods.forEach(method => {
+        method.addEventListener('change', (e) => {
+            if (e.target.value === 'cashOnDelivery') {
+                creditCardFields.classList.add('hidden');
+                // Remove required attribute from credit card fields
+                const cardFields = creditCardFields.querySelectorAll('input');
+                cardFields.forEach(field => field.removeAttribute('required'));
+            } else {
+                creditCardFields.classList.remove('hidden');
+                // Add required attribute back to credit card fields
+                const cardFields = creditCardFields.querySelectorAll('input');
+                cardFields.forEach(field => field.setAttribute('required', 'required'));
+            }
+        });
+    });
 }
 
 // Form validation
