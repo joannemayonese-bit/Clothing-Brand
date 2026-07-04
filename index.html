@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR ÉLITE | Luxury Men's Fashion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">NOIR ÉLITE</a>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#shop" class="nav-link">Shop</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="cart-icon" id="cartIcon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title animate-fade-up">
+                <span class="hero-subtitle">REDEFINE YOUR</span>
+                <span class="hero-main">ELEGANCE</span>
+            </h1>
+            <p class="hero-description animate-fade-up" style="animation-delay: 0.2s;">
+                Discover the pinnacle of men's luxury fashion. Crafted for those who demand excellence.
+            </p>
+            <a href="#shop" class="cta-button animate-fade-up" style="animation-delay: 0.4s;">
+                EXPLORE COLLECTION
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Shop Section -->
+    <section class="shop-section" id="shop">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">CURATED COLLECTION</h2>
+                <p class="section-subtitle">Timeless pieces for the modern gentleman</p>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product 1 - Suit -->
+                <div class="product-card reveal-element">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&q=80&w=600" 
+                             alt="Premium Wool Suit" 
+                             class="product-image"
+                             loading="lazy">
+                        <div class="product-overlay">
+                            <button class="quick-add-btn" data-product="Premium Wool Suit">
+                                <span class="btn-text">QUICK ADD +</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Premium Wool Suit</h3>
+                        <p class="product-category">Formal Collection</p>
+                        <p class="product-price">$2,499</p>
+                    </div>
+                </div>
+
+                <!-- Product 2 - Blazer -->
+                <div class="product-card reveal-element">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=600" 
+                             alt="Italian Linen Blazer" 
+                             class="product-image"
+                             loading="lazy">
+                        <div class="product-overlay">
+                            <button class="quick-add-btn" data-product="Italian Linen Blazer">
+                                <span class="btn-text">QUICK ADD +</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Italian Linen Blazer</h3>
+                        <p class="product-category">Smart Casual</p>
+                        <p class="product-price">$1,899</p>
+                    </div>
+                </div>
+
+                <!-- Product 3 - Bomber -->
+                <div class="product-card reveal-element">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=600" 
+                             alt="Leather Bomber Jacket" 
+                             class="product-image"
+                             loading="lazy">
+                        <div class="product-overlay">
+                            <button class="quick-add-btn" data-product="Leather Bomber Jacket">
+                                <span class="btn-text">QUICK ADD +</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Leather Bomber Jacket</h3>
+                        <p class="product-category">Outerwear</p>
+                        <p class="product-price">$3,299</p>
+                    </div>
+                </div>
+
+                <!-- Product 4 - Coat -->
+                <div class="product-card reveal-element">
+                    <div class="product-image-container">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600" 
+                             alt="Cashmere Overcoat" 
+                             class="product-image"
+                             loading="lazy">
+                        <div class="product-overlay">
+                            <button class="quick-add-btn" data-product="Cashmere Overcoat">
+                                <span class="btn-text">QUICK ADD +</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Cashmere Overcoat</h3>
+                        <p class="product-category">Winter Collection</p>
+                        <p class="product-price">$4,199</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">THE NOIR STANDARD</h2>
+                <p class="section-subtitle">Uncompromising quality in every stitch</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card reveal-element">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Premium Materials</h3>
+                    <p class="feature-description">Sourced from the finest mills in Italy and Japan</p>
+                </div>
+
+                <div class="feature-card reveal-element">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 6v6l4 2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Master Craftsmanship</h3>
+                    <p class="feature-description">200+ hours of meticulous hand-finishing per piece</p>
+                </div>
+
+                <div class="feature-card reveal-element">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Bespoke Service</h3>
+                    <p class="feature-description">Personal tailoring for the perfect fit</p>
+                </div>
+
+                <div class="feature-card reveal-element">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="1" y="3" width="15" height="13"></rect>
+                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">White-Glove Delivery</h3>
+                    <p class="feature-description">Complimentary worldwide shipping and returns</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">GET IN TOUCH</h2>
+                <p class="section-subtitle">Experience the NOIR ÉLITE difference</p>
+            </div>
+            
+            <div class="contact-content reveal-element">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        SEND MESSAGE
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">© 2024 NOIR ÉLITE. All rights reserved. Crafted with precision.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
