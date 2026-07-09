@@ -1,0 +1,35 @@
+# Robots.txt for NOIR ÉLITE - Luxury Men's Fashion
+# This file tells search engine crawlers which pages they can or cannot crawl
+
+# Allow all crawlers to access the site
+User-agent: *
+Allow: /
+
+# Disallow access to specific files/directories (if any)
+# Currently no disallowed paths as this is a public e-commerce site
+
+# Crawl delay (optional - uncomment if needed)
+# Crawl-delay: 1
+
+# Specify the location of the sitemap
+Sitemap: https://noirelite.com/sitemap.xml
+
+# Additional directives for specific crawlers
+# Googlebot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bingbot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Baiduspider
+User-agent: Baiduspider
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
